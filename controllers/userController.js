@@ -6,7 +6,7 @@ exports.user_detail = function (req, res, next) {
 };
 
 exports.user_login_get = function (req, res, next) {
-  res.send("user login page ");
+  res.render("login", { title: "LOG IN" });
 };
 
 exports.user_login_post = function (req, res) {
@@ -14,11 +14,11 @@ exports.user_login_post = function (req, res) {
 };
 
 exports.user_logout = function (req, res) {
-  res.send("user logged out ");
+  res.redirect("/");
 };
 
 exports.user_signup_get = function (req, res, next) {
-  res.send("user sign up page ");
+  res.render("signup", { title: "Sign Up" });
 };
 
 exports.user_signup_post = function (req, res) {

@@ -19,7 +19,7 @@ router.get("/:id/update", user_controller.user_update_get);
 
 router.post("/:id/update", user_controller.user_update_post);
 
-router.post("/:id/logout", user_controller.user_logout);
+router.get("/logout", user_controller.user_logout);
 
 router.get("/:id", user_controller.user_detail);
 
