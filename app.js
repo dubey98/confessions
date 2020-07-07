@@ -6,6 +6,7 @@ var logger = require("morgan");
 var session = require("express-session");
 var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
+var bcrypt = require("bcryptjs");
 
 //required router
 var indexRouter = require("./routes/index");
@@ -40,13 +41,13 @@ passport.use(
     User.findOne({ username: username }, (err, user) => {
       if (err) return done(err);
       if (!user) {
-        return done(null, false, { msg: "Incorrect password" });
+        return done(null, false, { msg: "Incorrect Username" });
       }
       bcrypt.compare(password, user.password, (err, res) => {
         if (res) return done(null, user);
         else return done(null, false, { msg: "Incorrect password" });
       });
-      return done(null, user);
+      // return done(null, user);
     });
   })
 );
