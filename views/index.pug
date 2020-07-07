@@ -2,14 +2,26 @@ extends layout
 
 block content
     if user
-        p Welcome back #{user.fullname}
-    else
         div.row.container-fluid
-            div.col-sm-6.card.border-0
-                div.card-body
-                    h4.card-title Post title
-                    p.card-text Card message goes here 
-                    a.card-link(href="#") Author Link
-                    a.card-link(href="#") Delete Link(only Admin)
-                div.card-footer.text-muted creation time displayed here
+            each post in posts
+                div.col-sm-5.card.border.border-secondary.m-1
+                    div.card-body
+                        h4.card-title #{post.title}
+                        p.card-text #{post.message} 
+                        if user.isMember
+                            a.card-link(href=user.url) #{user.fullname} 
+                        if user.isAdmin
+                            a.card-link(href="/post/"+ post._id + "/delete") 
+                                button.btn.btn-danger Delete
+                            a.card-link(href="/post/"+post._id+"/update") 
+                                button.btn.btn-secondary Update
+                    div.card-footer.text-muted #{post.date_formatted}
+    else 
+        div.row.container-fluid
+            each post in posts
+                div.col-sm-5.card.border.border-secondary.m-1
+                    div.card-body
+                        h4.card-title #{post.title}
+                        p.card-text #{post.message} 
+                    
                 

@@ -1,0 +1,7 @@
+extends layout
+
+block content
+    h3 Do you really want to delete this post ?
+    form(action="" method="post")
+        input(type="hidden", name="postId" value=id)
+        button.btn.btn-danger(type="submit") Delete

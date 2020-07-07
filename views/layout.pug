@@ -21,6 +21,8 @@ html(lang = "en")
               a.nav-link(href="/users/signup") Sign Up
           else
             li.nav-item.active
+              a.nav-link(href=user.url) My Profile
+            li.nav-item.active
               a.nav-link(href="/post/create") Create post
             li.nav-item.active
               a.nav-link(href="/users/logout") Log Out

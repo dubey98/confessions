@@ -1,12 +1,40 @@
 const validator = require("express-validator");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
+const async = require("async");
+require("dotenv").config();
 
 const User = require("../models/user");
 const Posts = require("../models/post");
 
 exports.user_detail = function (req, res, next) {
-  res.send("user detail page not implemented");
+  if (req.user && req.user.isMember) {
+    async.parallel(
+      {
+        user: function (callback) {
+          User.findById(req.params.id).exec(callback);
+        },
+        posts: function (callback) {
+          Posts.find({ author: req.params.id }).exec(callback);
+        },
+      },
+      function (err, results) {
+        if (err) return next(err);
+        if (results.user == null) {
+          const error = new Error("User not found");
+          error.status = 404;
+          return next(error);
+        }
+        res.render("user_detail", { user: results.user, posts: results.posts });
+      }
+    );
+  } else {
+    res.render("access_denied", {
+      title: "Access user credential",
+      user: req.user,
+      message: "You are not a member, Only members can see this facillity",
+    });
+  }
 };
 
 exports.user_login_get = function (req, res, next) {
@@ -65,27 +93,45 @@ exports.user_signup_post = [
         family_name: req.body.family_name,
         username: req.body.username,
         password: hashedPassword,
-        isAdmin: false,
-        isMember: false,
       });
-
-      console.log("CP 2 ");
-      if (!errors.isEmpty()) {
-        res.render("signup", {
-          title: "Sign Up",
-          user: user,
-          errors: errors.array(),
-        });
-        console.log("CP 3");
-      } else {
-        user.save(function (err) {
+      if (req.body.memberPassword === process.env.MEMBERPASSWORD)
+        user.isMember = true;
+      if (req.body.adminPassword === process.env.ADMINPASSWORD)
+        user.isAdmin = true;
+      async.parallel(
+        {
+          user: function (callback) {
+            User.findOne({ username: req.body.username }).exec(callback);
+          },
+        },
+        function (err, results) {
           if (err) return next(err);
-          req.login(user, function (err) {
-            if (err) return next(err);
-            else res.render("index", { user: req.user });
-          });
-        });
-      }
+          if (results.user == null) {
+            if (!errors.isEmpty()) {
+              res.render("signup", {
+                title: "Sign Up",
+                user: user,
+                errors: errors.array(),
+              });
+            } else {
+              user.save(function (err) {
+                if (err) return next(err);
+                req.login(user, function (err) {
+                  if (err) return next(err);
+                  else res.redirect("/");
+                });
+              });
+            }
+          } else {
+            res.render("signup", {
+              title: "Sign Up",
+              user: user,
+              message: "Sorry, that username is already taken",
+              errors: errors.array(),
+            });
+          }
+        }
+      );
     });
   },
 ];

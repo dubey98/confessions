@@ -1,0 +1,25 @@
+extends layout
+
+block content
+    if user
+        h2.text-uppercase.font-weight-bold.mt-5 #{user.fullname}
+        h5
+            if user.isMember
+                span.badge.badge-pill.badge-primary MEMBER
+            if user.isAdmin
+                span.badge.badge-pill.badge-primary ADMIN
+        p Username is : #{user.username}
+        table.table.table-striped
+            thead
+                tr
+                    th Post title
+                    th Posted on
+            tbody
+                each post in posts
+                    tr
+                        td #{post.title}
+                        td #{post.date_formatted}
+            
+    else
+        p you cannot access this if you are not a member.
+        p.text-info if you are a member try to reload or try again.

@@ -3,16 +3,18 @@ extends layout
 block content
     h2 #{title}
 
-    form(action="", method="post")
+    form(action="" method="post")
         div.form-group
             label(for="title") Title : 
             input#title.form-control(type="text", name="title" placeholder="Title goes here" value=(undefined ===post  ? "" : post.title))
         div.form-group
             label(for="message") Message : 
             textarea#message.form-control(type="textarea", rows="3" name="message" placeholder="write your message here.." value=(undefined===post ? "" : post.message))
+            if errors
+                each error in errors
+                    small.text-muted.form-text #{error.msg}
         button.btn.btn-primary(type="submit") Post
-    
-    if errors
-        each error in errors
-            p error.msg
-            
+    br
+    if post
+        a.mt-2(href=post.url)
+            button.btn.btn-secondary Cancel    
