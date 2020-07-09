@@ -9,6 +9,8 @@ var session = require("express-session");
 var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
 var bcrypt = require("bcryptjs");
+var compression = require("compression");
+var helmet = require("helmet");
 
 //required router
 var indexRouter = require("./routes/index");
@@ -19,10 +21,12 @@ require("dotenv").config();
 
 var app = express();
 
+app.use(helmet());
+
 //Set up mongoose connection
 var mongoose = require("mongoose");
 const user = require("./models/user");
-var mongoDB = process.env.DBHOST;
+var mongoDB = process.env.MONGODB_URL || process.env.DEVDB_URL;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
@@ -84,6 +88,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(compression()); //compress all routes
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
