@@ -2,19 +2,18 @@ extends layout
 
 block content
     if user
-        div.row.container-fluid
-            div.col-sm-6.card.border-0
-                div.card-body
-                    h4.card-title #{post.title}
-                    p.card-text #{post.message} 
-                    if user.isMember
-                        a.card-link(href=user.url) #{user.fullname}
-                    if user.isAdmin
-                        a.card-link(href="/post/"+post._id+"/delete") 
-                            button.btn.btn-danger Delete
-                        a.card-link(href="/post/"+post._id+"/update") 
-                            button.btn.btn-secondary Update
-                div.card-footer.text-muted #{post.date_formatted}
+        div.container-fluid.mt-4
+            h2.text-uppercase #{post.title}
+            p.blockqoute #{post.message} 
+            if user.isMember
+                a(href=post.author.url) #{post.author.fullname}
+            hr
+            if user.isAdmin
+                a.card-link(href="/post/"+post._id+"/delete") 
+                    button.btn.btn-danger Delete
+                a.card-link(href="/post/"+post._id+"/update") 
+                    button.btn.btn-secondary Update
+            
     else 
         div.row.container-fluid
             div.col-sm-6.card.border-0

@@ -3,7 +3,7 @@ extends layout
 block content
 
     div.row.justify-content-center
-        div.col-md-6.border-bottom.border-top.border-primary.pt-4.mt-2.mb-2.pb-4
+        div.col-md-5.border-bottom.border-top.border-primary.pt-4.mt-2.mb-2.pb-4
             h2.text-center #{title}
             form(action="", method="post")
                 div.form-group
@@ -29,7 +29,7 @@ block content
                 div.form-group
                     label(for="adminPassword") Are you an Admin(Optional) : 
                     input#adminPassword.form-control(type="password", name="adminPassword" placehoder="Enter Admin password... ")
-                button.btn.btn-primary(type="submit") Sign Up!
+                button.btn.btn-primary.btn-block(type="submit") Sign Up!
             if errors
                 each error in errors
                     p= error.msg

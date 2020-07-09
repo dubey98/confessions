@@ -2,24 +2,23 @@ extends layout
 
 block content
     if user
-        div.row.container-fluid
+        div.row.container-fluid.justify-content-center
             each post in posts
-                div.col-sm-5.card.border.border-secondary.m-1
+                div.col-md-5.card.border.border-secondary.m-1.bg-dark.text-white
                     div.card-body
-                        h4.card-title #{post.title}
+                        h4.card-title 
+                            a(href= post.url) #{post.title}
                         p.card-text #{post.message} 
                         if user.isMember
-                            a.card-link(href=user.url) #{user.fullname} 
-                        if user.isAdmin
-                            a.card-link(href="/post/"+ post._id + "/delete") 
-                                button.btn.btn-danger Delete
-                            a.card-link(href="/post/"+post._id+"/update") 
-                                button.btn.btn-secondary Update
+                            a.card-link(href=(null===post.author ? "Author missing" : post.author.url)) #{(null===post.author ? "Author missing" : post.author.fullname)}                    
                     div.card-footer.text-muted #{post.date_formatted}
+                        if user.isAdmin
+                            a.card-link.float-right.m-1.text-danger(href="/post/"+ post._id + "/delete") Delete
+                            a.card-link.float-right.m-1.text-info(href="/post/"+post._id+"/update") Update
     else 
-        div.row.container-fluid
+        div.container-fluid.row
             each post in posts
-                div.col-sm-5.card.border.border-secondary.m-1
+                div.col-md-5.card.border.border-secondary.m-1
                     div.card-body
                         h4.card-title #{post.title}
                         p.card-text #{post.message} 

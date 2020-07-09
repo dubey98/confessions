@@ -8,7 +8,7 @@ const User = require("../models/user");
 const Posts = require("../models/post");
 
 exports.user_detail = function (req, res, next) {
-  if (req.user && req.user.isMember) {
+  if (req.user) {
     async.parallel(
       {
         user: function (callback) {
@@ -29,11 +29,7 @@ exports.user_detail = function (req, res, next) {
       }
     );
   } else {
-    res.render("access_denied", {
-      title: "Access user credential",
-      user: req.user,
-      message: "You are not a member, Only members can see this facillity",
-    });
+    res.redirect("/users/login");
   }
 };
 

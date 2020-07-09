@@ -9,7 +9,8 @@ block content
             input#title.form-control(type="text", name="title" placeholder="Title goes here" value=(undefined ===post  ? "" : post.title))
         div.form-group
             label(for="message") Message : 
-            textarea#message.form-control(type="textarea", rows="3" name="message" placeholder="write your message here.." value=(undefined===post ? "" : post.message))
+            textarea#message.form-control(type="textarea", rows="3" name="message" placeholder="write your message here..")
+                | #{undefined===post ? "" : post.message}
             if errors
                 each error in errors
                     small.text-muted.form-text #{error.msg}

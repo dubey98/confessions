@@ -7,7 +7,7 @@ const { validationResult } = require("express-validator");
 const { locals } = require("../app");
 
 exports.index = function (req, res, next) {
-  console.log(req.user);
+  // console.log(req.user);
   Post.find({})
     .populate("author")
     .exec(function (err, results) {
@@ -36,6 +36,7 @@ exports.post_detail = function (req, res) {
           return next(error);
         }
         res.render("post_detail", {
+          title: results.post.title,
           post: results.post,
           user: req.user,
         });
@@ -58,6 +59,11 @@ exports.post_create_get = function (req, res) {
 };
 
 exports.post_create_post = [
+  (req, res, next) => {
+    if (req.user) next();
+    else res.redirect("/users/login");
+  },
+
   validator
     .body("title", "your post should have a title")
     .trim()
@@ -174,7 +180,7 @@ exports.post_update_post = [
       title: req.body.title,
       message: req.body.message,
       author: req.user._id,
-      _id: req.body.id,
+      _id: req.params.id,
     });
 
     if (!errors.isEmpty()) {
